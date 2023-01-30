@@ -40,6 +40,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: quay.io/jbtrystram/toolbox
+        context: ${{ env.TOOLBOX_NAME }}
         tags: latest
         platforms: linux/amd64
         layers: false
