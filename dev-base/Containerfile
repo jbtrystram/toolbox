@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora-toolbox:37
 
-COPY extra-packages
+COPY extra-packages /
 
 RUN dnf -y install $(<extra-packages)
