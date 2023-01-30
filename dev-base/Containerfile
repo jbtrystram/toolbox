@@ -1,0 +1,7 @@
+FROM registry.fedoraproject.org/fedora-toolbox:37
+
+COPY extra-packages /
+
+RUN dnf -y install $(<extra-packages)
+
+COPY functions.sh /etc/profile.d/functions.sh
