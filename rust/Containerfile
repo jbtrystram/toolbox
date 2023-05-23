@@ -1,6 +1,6 @@
-FROM quay.io/jbtrystram/toolbox
+FROM quay.io/jbtrystram/toolbox:dev-base
 
-RUN RUN microdnf install -y gcc openssl openssl-devel cmake gcc-c++
+RUN dnf install -y gcc openssl openssl-devel cmake gcc-c++
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y 
 ENV PATH "$PATH:/root/.cargo/bin"
 
