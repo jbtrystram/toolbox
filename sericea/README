@@ -1,5 +1,0 @@
-Build then push the image
-
-`rpm-ostree rebase ostree-unverified-image:docker://quay.io/jbtrystram/toolbox:sericea`
-
-Reboot. Voilà !
