@@ -1,0 +1,23 @@
+FROM quay.io/toolbx-images/alpine-toolbox:3.18
+
+ARG NAME=dotfiles-toolbox
+ARG VERSION=0.1
+
+LABEL com.github.containers.toolbox="true" \
+      org.opencontainers.image.source="https://github.com/jbtrystram/toolbox/dotfiles" \
+      name="$NAME" \
+      version="$VERSION" \
+      usage="This image is meant to be used with the toolbox command" \
+      summary="Toolbox image to manage dotfiles with chezmoi" \
+      maintainer="jbtrystram"
+
+RUN apk update && \
+        apk upgrade && \
+        apk add --no-cache zsh curl git openssh vim pass
+
+# Workaround to avoid `zsh` not found when using in toolbox from fedora
+RUN ln -s /bin/zsh /usr/bin/zsh
+
+RUN sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+
+COPY welcome.sh /etc/profile.d/
