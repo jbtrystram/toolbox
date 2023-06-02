@@ -3,8 +3,8 @@
 ## Setup
 
 ```
-toolbox create dotfiles --image quay.io/jbtrystram/toolbox-dotfiles`
-toolbox enter dotfiles`
+toolbox create dotfiles --image quay.io/jbtrystram/toolbox-dotfiles
+toolbox enter dotfiles
 ```
 
 ## Usage
@@ -16,8 +16,8 @@ chezmoi init --apply jbtrystram
 
 ## TODO
 
-[] helper/welcome message
-[] Github CI to build and push the image : https://github.com/jcapiitao/toolbox/blob/main/.github/workflows/build-and-push-dotfiles.yaml
+- [ ] helper/welcome message
+- [ ] Github CI to build and push the image : [example](https://github.com/jcapiitao/toolbox/blob/main/.github/workflows/build-and-push-dotfiles.yaml)
 
 # Build
 ```
