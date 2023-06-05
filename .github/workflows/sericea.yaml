@@ -78,6 +78,13 @@ jobs:
     steps:
     - uses: sigstore/cosign-installer@main
 
+    - name: Log in to Quay.io
+      uses: redhat-actions/podman-login@v1
+      with:
+        username: ${{ env.REGISTRY_USER }}
+        password: ${{ env.REGISTRY_PASSWORD }}
+        registry: ${{ env.IMAGE_REGISTRY }}
+
     - name: Sign the images with GitHub OIDC Token
       env:
         IMAGE: "quay.io/jbtrystram/fedora-sericea"
