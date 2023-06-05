@@ -1,4 +1,4 @@
-FROM quay.io/fedora/fedora-sericea:rawhide
+FROM quay.io/fedora/fedora-sericea:39
 
 LABEL maintainer=jbtrystram
 

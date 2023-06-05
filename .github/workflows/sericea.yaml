@@ -1,0 +1,76 @@
+name: "Sericea: Build and push fedora-sericea custom image"
+on:
+  push:
+    paths:
+      - sericea/**
+      - .github/workflows/sericea.yaml
+  schedule:
+    - cron:  '0 0 * * MON'
+
+# Prevent multiple workflow runs from racing
+concurrency: ${{ github.workflow }}
+
+env:
+  REGISTRY_USER: ${{ secrets.QUAY_USER }}
+  IMAGE_REGISTRY: 'quay.io'
+  REGISTRY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
+  IMAGE_NAME: "fedora-sericea"
+  TAG: "39"
+
+
+jobs:
+  build-and-publish-image:
+    name: Build image
+    runs-on: ubuntu-20.04
+    # Map a step output to a job output
+    outputs:
+      image_digest: ${{ steps.push-to-quay.outputs.digest }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build sericea image
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: quay.io/jbtrystram/fedora-sericea
+        context: sericea
+        tags: ${{ env.TAG }} latest
+        platforms: linux/amd64
+        layers: false
+        oci: true
+        containerfiles: |
+          sericea/Containerfile
+
+    - name: Log in to Quay.io
+      uses: redhat-actions/podman-login@v1
+      with:
+        username: ${{ env.REGISTRY_USER }}
+        password: ${{ env.REGISTRY_PASSWORD }}
+        registry: ${{ env.IMAGE_REGISTRY }}
+
+    - name: Push to quay.io
+      id: push-to-quay
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        tags: ${{ steps.build-image.outputs.image }}:${{ env.TAG }}
+
+    - name: Print image url
+      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths.image_digest }}"
+
+  sign-image:
+    name: Sign image
+    runs-on: ubuntu-20.04
+    needs: [build-and-publish-image]
+
+    env:
+      DIGEST: ${{ needs.build-and-publish-image.outputs. }}
+
+    steps:
+    - uses: sigstore/cosign-installer@main
+
+    - name: Sign the images with GitHub OIDC Token
+      env:
+        IMAGE: "quay.io/jbtrystram/fedora-sericea"
+      run: echo "${IMAGE}" | xargs -I {} cosign sign --yes {}@${DIGEST}
