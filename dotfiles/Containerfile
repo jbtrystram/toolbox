@@ -13,7 +13,7 @@ LABEL com.github.containers.toolbox="true" \
 
 RUN apk update && \
         apk upgrade && \
-        apk add --no-cache zsh curl git openssh vim pass delta
+        apk add --no-cache zsh curl git openssh vim pass delta xdg-utils
 
 # Workaround to avoid `zsh` not found when using in toolbox from fedora
 RUN ln -s /bin/zsh /usr/bin/zsh
