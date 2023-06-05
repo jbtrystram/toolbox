@@ -65,7 +65,7 @@ jobs:
     needs: [build-and-publish-image]
 
     env:
-      DIGEST: ${{ needs.build-and-publish-image.outputs. }}
+      DIGEST: ${{ needs.build-and-publish-image.outputs.image_digest }}
 
     steps:
     - uses: sigstore/cosign-installer@main
