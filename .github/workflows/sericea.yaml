@@ -1,6 +1,8 @@
 name: "Sericea: Build and push fedora-sericea custom image"
 on:
   push:
+    branches:
+      - main
     paths:
       - sericea/**
       - .github/workflows/sericea.yaml
@@ -73,4 +75,10 @@ jobs:
     - name: Sign the images with GitHub OIDC Token
       env:
         IMAGE: "quay.io/jbtrystram/fedora-sericea"
-      run: echo "${IMAGE}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+        COSIGN_EXPERIMENTAL: "true"
+      run: | 
+        cosign sign \
+        -a "repo=${{ github.repository }}" \
+        -a "workflow=${{ github.workflow }}" \
+        -a "ref=${{ github.sha }}" \
+        --yes ${IMAGE}@${DIGEST}
