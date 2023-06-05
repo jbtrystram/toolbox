@@ -65,6 +65,12 @@ jobs:
     name: Sign image
     runs-on: ubuntu-20.04
     needs: [build-and-publish-image]
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
 
     env:
       DIGEST: ${{ needs.build-and-publish-image.outputs.image_digest }}
