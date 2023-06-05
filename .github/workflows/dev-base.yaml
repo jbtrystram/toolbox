@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - dev-base/**
+      - toolbox/**
       - .github/workflows/dev-base.yaml
   schedule:
     - cron:  '0 0 * * MON'
@@ -16,47 +16,81 @@ env:
   REGISTRY_USER: ${{ secrets.QUAY_USER }}
   IMAGE_REGISTRY: 'quay.io'
   REGISTRY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
-  TOOLBOX_NAME: 'dev-base'
+  REGISTRY_ORG: "jbtrystram"
+  IMAGE_NAME: "toolbox"
+  TAG: "latest"
+  CONTEXT: "toolbox"
+
 
 jobs:
-  build-and-push-images:
-    name: Build and push image
-
-    runs-on: ubuntu-20.04
+  build-and-publish-image:
+    name: Build image
+    runs-on: ubuntu-22.04
+    # Map a step output to a job output
+    outputs:
+      image_digest: ${{ steps.push-to-quay.outputs.digest }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Log in to Quay.io
-      uses: redhat-actions/podman-login@v1
-      with:
-        username: ${{ env.REGISTRY_USER }}
-        password: ${{ env.REGISTRY_PASSWORD }}
-        registry: ${{ env.IMAGE_REGISTRY }}
+      - name: Build toolbox image
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
+          context: ${{ env.CONTEXT }}
+          tags: ${{ env.TAG }} latest
+          platforms: linux/amd64
+          layers: false
+          oci: true
+          containerfiles: |
+            ${{ env.CONTEXT }}/Containerfile
 
-    - name: Build ${{ env.TOOLBOX_NAME }} toolbox image
-      id: build-image
-      uses: redhat-actions/buildah-build@v2
-      with:
-        image: quay.io/jbtrystram/toolbox
-        context: ${{ env.TOOLBOX_NAME }}
-        tags: latest
-        platforms: linux/amd64
-        layers: false
-        containerfiles: |
-          ${{ env.TOOLBOX_NAME }}/Containerfile
+      - name: Log in to Quay.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
 
-    - name: Push to quay.io
-      id: push-to-quay
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        tags: ${{ steps.build-image.outputs.image }}:latest
+      - name: Push to quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          tags: ${{ steps.build-image.outputs.image }}:${{ env.TAG }}
 
-    - name: Print image url
-      run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+  sign-image:
+    name: Sign image
+    runs-on: ubuntu-20.04
+    needs: [build-and-publish-image]
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
 
-    - name: Push latest tag
-      uses: redhat-actions/push-to-registry@v2
-      with:
-        tags: ${{ steps.build-image.outputs.image }}:latest
+    env:
+      DIGEST: ${{ needs.build-and-publish-image.outputs.image_digest }}
+
+    steps:
+      - uses: sigstore/cosign-installer@main
+
+      - name: Log in to Quay.io
+        uses: redhat-actions/podman-login@v1
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Sign the images with GitHub OIDC Token
+        env:
+          IMAGE: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          cosign sign \
+          -a "repo=${{ github.repository }}" \
+          -a "workflow=${{ github.workflow }}" \
+          -a "ref=${{ github.sha }}" \
+          --yes ${IMAGE}@${DIGEST}
