@@ -43,7 +43,6 @@ Reboot. Voilà !
 # TODO
 
 - [x] sign the image
-- [ ] Build the image with GH actions, signing the image using fulco keyless process
+- [x] Build the image with GH actions, signing the image using fulco keyless process
 - [ ] nvidia tweaks 
 - [ ] init script
-- [ ] Build the image with GH actions, signing the image using fulco keyless process

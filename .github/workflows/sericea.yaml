@@ -16,6 +16,7 @@ env:
   REGISTRY_USER: ${{ secrets.QUAY_USER }}
   IMAGE_REGISTRY: 'quay.io'
   REGISTRY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
+  REGISTRY_ORG: "jbtrystram"
   IMAGE_NAME: "fedora-sericea"
   TAG: "39"
 
@@ -36,7 +37,7 @@ jobs:
       id: build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: "{{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}"
+        image: "{{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
         context: sericea
         tags: ${{ env.TAG }} latest
         platforms: linux/amd64
@@ -84,7 +85,7 @@ jobs:
 
     - name: Sign the images with GitHub OIDC Token
       env:
-        IMAGE: "{{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_USER }}/${{ env.IMAGE_NAME }}"
+        IMAGE: "{{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
         COSIGN_EXPERIMENTAL: "true"
       run: | 
         cosign sign \
