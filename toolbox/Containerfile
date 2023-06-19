@@ -1,10 +1,11 @@
 FROM registry.fedoraproject.org/fedora-toolbox:38
 
+LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
+
 COPY extra-packages /
 
 RUN dnf -y install $(<extra-packages)
 
-RUN rm /usr/bin/podman
-RUN ln -s /usr/bin/podman-remote /usr/bin/podman
+RUN rm /usr/bin/podman && ln -s /usr/bin/podman-remote /usr/bin/podman
 
 RUN sudo ln -s /usr/bin/flatpak-xdg-open /usr/bin/xdg-open
