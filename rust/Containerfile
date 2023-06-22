@@ -8,4 +8,4 @@ LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox/rus
 
 COPY extra-packages /opt/
 
-RUN rpm-ostree install -y $(</opt/extragit push -packages)
+RUN dnf install -y $(</opt/extra-packages)
