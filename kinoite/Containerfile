@@ -4,10 +4,10 @@ LABEL maintainer=jbtrystram
 # Keep container image for ~2 months
 LABEL quay.expires-after=8w
 
-COPY extra-packages /opt/
+COPY extra-packages /tmp/
 
 RUN rpm-ostree install \
   https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm \
   https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm \
-  && rpm-ostree install -y $(</opt/extra-packages) \
+  && rpm-ostree install -y $(</tmp/extra-packages) \
   && ostree container commit
