@@ -27,7 +27,11 @@ jobs:
     runs-on: ubuntu-20.04
     # Map a step output to a job output
     outputs:
-      image_digest: ${{ steps.push-to-quay.outputs.digest }}
+      main-digest: ${{ steps.output.outputs.main }}
+      nvidia-digest: ${{ steps.output.outputs.nvidia }}
+    strategy:
+      matrix:
+        variant: [ main, nvidia ]
 
     steps:
     - name: Checkout
@@ -37,12 +41,14 @@ jobs:
       id: build-image
       uses: redhat-actions/buildah-build@v2
       with:
-        image: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
+        image: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}-${{matrix.variant}}"
         context: kinoite
         tags: ${{ env.TAG }} latest
         platforms: linux/amd64
         layers: false
         oci: true
+        build-args: | 
+          variant=${{matrix.variant}}
         containerfiles: |
           kinoite/Containerfile
 
@@ -59,6 +65,11 @@ jobs:
       with:
         tags: ${{ steps.build-image.outputs.image }}:${{ env.TAG }}
 
+    - name: save image digest
+      id: output
+      run: |
+        echo "${{ matrix.variant }}=${{ steps.push-to-quay.outputs.digest }}" >> $GITHUB_OUTPUT    
+
   sign-image:
     name: Sign image
     runs-on: ubuntu-20.04
@@ -70,8 +81,12 @@ jobs:
       # with sigstore/fulcio when running outside of PRs.
       id-token: write
 
+    strategy:
+      matrix:
+        variant: [ main, nvidia ]
+
     env:
-      DIGEST: ${{ needs.build-and-publish-image.outputs.image_digest }}
+      DIGEST: ${{ needs.build-and-publish-image.outputs.${{ matrix.variant }}-digest }}
 
     steps:
     - uses: sigstore/cosign-installer@main
@@ -85,7 +100,7 @@ jobs:
 
     - name: Sign the images with GitHub OIDC Token
       env:
-        IMAGE: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}"
+        IMAGE: "${{ env.IMAGE_REGISTRY }}/${{ env.REGISTRY_ORG }}/${{ env.IMAGE_NAME }}-${{matrix.variant}}"
         COSIGN_EXPERIMENTAL: "true"
       run: | 
         cosign sign \

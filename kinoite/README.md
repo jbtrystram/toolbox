@@ -1,3 +1,5 @@
 # Fedora kinoite custom image
 
-wip based on https://github.com/travier/fedora-kinoite
+derived from ublue-os
+
+https://github.com/ublue-os/main
