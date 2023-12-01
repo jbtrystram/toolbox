@@ -10,5 +10,4 @@ COPY extra-packages /tmp/
 
 RUN rpm-ostree install -y $(</tmp/extra-packages) \
   && systemctl enable libvirtd.socket \
-  && rm -rf /var/lib/unbound/root.key \
   && ostree container commit
