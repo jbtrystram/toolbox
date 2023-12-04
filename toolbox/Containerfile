@@ -26,7 +26,7 @@ RUN bins=( \
     "virsh" \
     "virt-install" \
     "xdg-open" \
-    "gitsign"
+    "gitsign" \
     ); \
     for f in "${bins[@]}"; do \
         ln -s host-runner /usr/local/bin/$f;\
