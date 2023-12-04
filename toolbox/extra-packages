@@ -5,6 +5,5 @@ git-delta
 zsh
 vim
 jq
-podman-remote
 podman-compose
 flatpak-xdg-utils
