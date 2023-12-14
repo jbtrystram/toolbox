@@ -8,7 +8,9 @@ LABEL quay.expires-after=8w
 
 COPY extra-packages /tmp/
 
-RUN rpm-ostree install -y $(</tmp/extra-packages) \
-  && systemctl enable libvirtd.socket \
+RUN rpm-ostree install -y $(</tmp/extra-packages)
+RUN systemctl enable libvirtd.socket \
   && rm var/lib/unbound/root.key \
+  &&  mkdir -p /etc/selinux/targeted/tmp/modules/100/ \
+  && ln -s /etc/selinux/targeted/active/modules/100/procmail/ /etc/selinux/targeted/tmp/modules/100/procmail \ 
   && ostree container commit

@@ -16,6 +16,7 @@ chezmoi init --apply jbtrystram
 
 ## TODO
 
+- [ ] Move to regular toolbox
 - [ ] helper/welcome message
 - [ ] Github CI to build and push the image : [example](https://github.com/jcapiitao/toolbox/blob/main/.github/workflows/build-and-push-dotfiles.yaml)
 

@@ -1,8 +1,6 @@
 autojump-zsh
 fira-code-fonts
 fontawesome5-fonts-all
-gstreamer1-plugin-openh264
-mozilla-openh264
 iwd
 libvirt-daemon
 libvirt-daemon-config-network
@@ -14,6 +12,5 @@ libvirt-daemon-driver-secret
 libvirt-daemon-driver-storage-core
 libvirt-dbus
 qemu-kvm
-sysprof
 vim
 zsh
