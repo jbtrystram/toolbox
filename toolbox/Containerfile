@@ -7,10 +7,6 @@ COPY extra-packages /
 RUN dnf -y install $(<extra-packages) \
     && dnf clean all
 
-RUN rm /usr/bin/podman && ln -s /usr/bin/podman-remote /usr/bin/podman
-
-RUN sudo ln -s /usr/bin/flatpak-xdg-open /usr/bin/xdg-open
-
 # No need to clear the output as we will never use ZSH as a login shell and
 # this clears output when exiting toolboxes.
 RUN sed -i '/clear/d' /etc/zlogout

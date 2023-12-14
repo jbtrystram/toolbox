@@ -1,11 +1,11 @@
-name: "dev-base: Build and push toolbox"
+name: "toolbox: Build and push"
 on:
   push:
     branches:
       - main
     paths:
       - toolbox/**
-      - .github/workflows/dev-base.yaml
+      - .github/workflows/toolbox.yaml
   schedule:
     - cron:  '0 0 * * MON'
 
