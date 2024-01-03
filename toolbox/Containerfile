@@ -2,10 +2,11 @@ FROM registry.fedoraproject.org/fedora-toolbox:39
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
-COPY extra-packages /
+COPY extra-packages chezmoi.sh /
 
 RUN dnf -y install $(<extra-packages) \
     && dnf clean all
+RUN /chezmoi.sh
 
 # No need to clear the output as we will never use ZSH as a login shell and
 # this clears output when exiting toolboxes.
