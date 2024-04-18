@@ -3,8 +3,9 @@ foot-terminfo
 git
 git-delta
 zsh
-vim
 jq
 podman-compose
 flatpak-xdg-utils
 butane
+make
+neovim
