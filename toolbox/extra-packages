@@ -1,5 +1,3 @@
-autojump-zsh
-foot-terminfo
 git
 git-delta
 zsh
@@ -9,3 +7,5 @@ flatpak-xdg-utils
 butane
 make
 neovim
+go
+zoxide
