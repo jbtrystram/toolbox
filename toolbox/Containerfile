@@ -15,6 +15,7 @@ RUN sed -i '/clear/d' /etc/zlogout
 # Setup host-runner script and symlinks
 COPY host-runner /usr/local/bin/host-runner
 RUN bins=( \
+    "ujust" \
     "firefox" \
     "flatpak" \
     "podman" \
