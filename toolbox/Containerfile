@@ -13,6 +13,7 @@ RUN /chezmoi.sh
 RUN sed -i '/clear/d' /etc/zlogout
 
 # Setup host-runner script and symlinks
+COPY host /usr/local/bin/host
 COPY host-runner /usr/local/bin/host-runner
 RUN bins=( \
     "ujust" \
