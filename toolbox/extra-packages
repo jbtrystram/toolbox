@@ -8,4 +8,5 @@ butane
 make
 neovim
 go
+skopeo
 zoxide
