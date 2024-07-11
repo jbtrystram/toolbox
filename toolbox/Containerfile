@@ -2,18 +2,18 @@ FROM registry.fedoraproject.org/fedora-toolbox:40
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
-COPY extra-packages chezmoi.sh /
+COPY extra-packages chezmoi.sh helix.sh /setup
 
-RUN dnf -y install $(<extra-packages) \
+RUN dnf -y install $(</setup/extra-packages) \
     && dnf clean all
-RUN /chezmoi.sh
+RUN /setup/chezmoi.sh
+RUN /setup/helix.sh
 
 # No need to clear the output as we will never use ZSH as a login shell and
 # this clears output when exiting toolboxes.
 RUN sed -i '/clear/d' /etc/zlogout
 
 # Setup host-runner script and symlinks
-COPY host /usr/local/bin/host
 COPY host-runner /usr/local/bin/host-runner
 RUN bins=( \
     "ujust" \
@@ -30,3 +30,6 @@ RUN bins=( \
     for f in "${bins[@]}"; do \
         ln -s host-runner /usr/local/bin/$f;\
     done
+
+# cleanup
+RUN rm -rf /setup
