@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora-toolbox:40
+FROM quay.io/jlebon/pet:f40
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
