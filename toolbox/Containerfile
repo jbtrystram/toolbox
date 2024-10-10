@@ -5,9 +5,10 @@ LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 COPY extra-packages chezmoi.sh helix.sh /setup
 
 RUN dnf -y install $(</setup/extra-packages) \
-    && dnf clean all
-RUN /setup/chezmoi.sh
-RUN /setup/helix.sh
+    && dnf clean all \
+    && /setup/chezmoi.sh \
+    && /setup/helix.sh \
+    && rm -rf /setup
 
 # No need to clear the output as we will never use ZSH as a login shell and
 # this clears output when exiting toolboxes.
@@ -30,6 +31,3 @@ RUN bins=( \
     for f in "${bins[@]}"; do \
         ln -s host-runner /usr/local/bin/$f;\
     done
-
-# cleanup
-RUN rm -rf /setup
