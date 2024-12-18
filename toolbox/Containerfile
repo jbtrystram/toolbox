@@ -1,8 +1,8 @@
-FROM quay.io/jlebon/pet:f40
+FROM quay.io/jlebon/pet:f41
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
-COPY extra-packages chezmoi.sh helix.sh /setup
+COPY extra-packages chezmoi.sh helix.sh /setup/
 
 RUN dnf -y install $(</setup/extra-packages) \
     && dnf clean all \
