@@ -21,7 +21,6 @@ RUN bins=( \
     "firefox" \
     "flatpak" \
     "podman" \
-    "rpm-ostree" \
     "systemctl" \
     "virsh" \
     "virt-install" \
