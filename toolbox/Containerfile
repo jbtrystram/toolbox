@@ -8,6 +8,7 @@ RUN dnf -y install $(</setup/extra-packages) \
     && dnf clean all \
     && /setup/chezmoi.sh \
     && /setup/helix.sh \
+    && /setup/misc-tools.sh \
     && rm -rf /setup
 
 # No need to clear the output as we will never use ZSH as a login shell and
