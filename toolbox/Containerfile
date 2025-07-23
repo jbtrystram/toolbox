@@ -2,7 +2,7 @@ FROM quay.io/jlebon/pet:f42
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
-COPY extra-packages chezmoi.sh helix.sh /setup/
+COPY extra-packages chezmoi.sh helix.sh misc-tools.sh /setup/
 
 RUN dnf -y install $(</setup/extra-packages) \
     && dnf clean all \
