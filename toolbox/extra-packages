@@ -5,6 +5,7 @@ git-delta
 go
 helix
 jq
+just
 make
 npm
 podman-compose
