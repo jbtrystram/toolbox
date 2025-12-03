@@ -1,4 +1,4 @@
-FROM quay.io/jlebon/pet:f42
+FROM quay.io/jlebon/pet:f43
 
 LABEL org.opencontainers.image.source="https://github.com/jbtrystram/toolbox"
 
