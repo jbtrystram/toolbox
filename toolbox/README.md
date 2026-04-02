@@ -10,3 +10,5 @@ A quick hack:
 sudo rm -rf /etc/pki/ca-trust
 sudo ln -s  /run/host/etc/pki/ca-trust /etc/pki/ca-trust
 ```
+
+Last good build: CHANGEME
