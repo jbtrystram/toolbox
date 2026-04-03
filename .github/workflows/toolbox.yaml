@@ -8,6 +8,8 @@ on:
       - .github/workflows/toolbox.yaml
   schedule:
     - cron:  '0 0 * * MON'
+  # allow manual trigger
+  workflow_dispatch:
 
 # Prevent multiple workflow runs from racing
 concurrency: ${{ github.workflow }}
@@ -94,3 +96,27 @@ jobs:
           -a "workflow=${{ github.workflow }}" \
           -a "ref=${{ github.sha }}" \
           --yes ${IMAGE}@${DIGEST}
+
+  update-readme:
+    name: Update README with build date
+    runs-on: ubuntu-24.04
+    needs: [sign-image]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update build date in README
+        run: |
+          BUILD_DATE="$(date -u '+%Y-%m-%d %H:%M UTC')"
+          sed -i "s|Last good build:.*|Last good build: ${BUILD_DATE}|" toolbox/README.md
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add toolbox/README.md
+          git commit -m "toolbox: update README with last build date"
+          git push
