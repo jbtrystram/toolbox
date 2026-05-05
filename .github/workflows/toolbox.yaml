@@ -3,9 +3,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - toolbox/**
-      - .github/workflows/toolbox.yaml
+    paths-ignore:
+      - 'README.md'
   schedule:
     - cron:  '0 0 * * MON'
   # allow manual trigger
@@ -21,7 +20,7 @@ env:
   REGISTRY_ORG: "jbtrystram"
   IMAGE_NAME: "toolbox"
   TAG: "latest"
-  CONTEXT: "toolbox"
+  CONTEXT: "."
 
 
 jobs:
@@ -117,6 +116,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add toolbox/README.md
+          git add ${{ env.CONTEXT }}/README.md
           git commit -m "toolbox: update README with last build date"
           git push
