@@ -110,7 +110,7 @@ jobs:
       - name: Update build date in README
         run: |
           BUILD_DATE="$(date -u '+%Y-%m-%d %H:%M UTC')"
-          sed -i "s|Last good build:.*|Last good build: ${BUILD_DATE}|" toolbox/README.md
+          sed -i "s|Last good build:.*|Last good build: ${BUILD_DATE}|" ${{ env.CONTEXT }}/README.md
 
       - name: Commit and push
         run: |
