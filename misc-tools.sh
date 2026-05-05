@@ -19,3 +19,5 @@ bash /tmp/opencode --no-modify-path
 # opencode installs to a dumb location
 mv /root/.opencode/bin/opencode /usr/local/bin/opencode
 rm -rf /root/.opencode
+# remove install-script
+rm /tmp/opencode
