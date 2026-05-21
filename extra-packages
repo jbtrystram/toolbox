@@ -10,6 +10,7 @@ make
 npm
 podman-compose
 python-pip
+qemu-system-x86_64
 rustup
 skopeo
 zoxide
