@@ -27,3 +27,8 @@ rm /tmp/opencode
 dnf copr enable chmouel/tektoncd-cli fedora-43-x86_64 -y
 dnf install tektoncd-cli -y 
 dnf copr disable chmouel/tektoncd-cli
+
+# openshift client tools
+url="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/openshift-client-linux.tar.gz"
+curl -L "$url" | tar zxf - oc
+mv oc /usr/bin
