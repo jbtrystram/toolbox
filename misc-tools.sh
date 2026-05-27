@@ -2,10 +2,11 @@
 
 set -euxo pipefail
 
+OCP_URL=https://mirror.openshift.com/pub/openshift-v4/clients
 # tekton cli
-curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/tkn-linux-amd64.tar.gz -o tkn.tar.gz
-tar xvf tkn.tar.gz -C /usr/local/bin/ --no-same-owner
-rm -f tkn.tar.gz
+curl -L $OCP_URL/pipelines/latest/tkn-linux-amd64.tar.gz | tar xvzf - tkn -C /usr/local/bin --no-same-owner
+# oc cli
+curl -L $OCP_URL/ocp/latest/openshift-client-linux.tar.gz | tar zvxf - oc -C /usr/local/bin --no-same-owner
 
 # To test GH actions
 # https://github.com/nektos/act/
@@ -22,13 +23,3 @@ rm -rf /root/.opencode
 # remove install-script
 rm /tmp/opencode
 
-# Tekton CLI
-# https://github.com/tektoncd/cli/
-dnf copr enable chmouel/tektoncd-cli fedora-43-x86_64 -y
-dnf install tektoncd-cli -y 
-dnf copr disable chmouel/tektoncd-cli
-
-# openshift client tools
-url="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/openshift-client-linux.tar.gz"
-curl -L "$url" | tar zxf - oc
-mv oc /usr/bin
