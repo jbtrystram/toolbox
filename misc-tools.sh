@@ -21,3 +21,9 @@ mv /root/.opencode/bin/opencode /usr/local/bin/opencode
 rm -rf /root/.opencode
 # remove install-script
 rm /tmp/opencode
+
+# Tekton CLI
+# https://github.com/tektoncd/cli/
+dnf copr enable chmouel/tektoncd-cli fedora-43-x86_64 -y
+dnf install tektoncd-cli -y 
+dnf copr disable chmouel/tektoncd-cli
