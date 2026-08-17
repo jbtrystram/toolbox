@@ -11,4 +11,4 @@ sudo rm -rf /etc/pki/ca-trust
 sudo ln -s  /run/host/etc/pki/ca-trust /etc/pki/ca-trust
 ```
 
-Last good build: 2026-08-10 00:19 UTC
+Last good build: 2026-08-17 00:16 UTC
