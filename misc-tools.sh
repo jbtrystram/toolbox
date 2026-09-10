@@ -23,3 +23,9 @@ rm -rf /root/.opencode
 # remove install-script
 rm /tmp/opencode
 
+# RTK to reduce token consumption
+cargo install --git https://github.com/rtk-ai/rtk
+mv /root/.cargo/bin/rtk /usr/local/bin/rtk
+# The opencode plugin
+# See https://github.com/martinstannard/openrtk
+npm install openrtk
