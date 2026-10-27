@@ -24,12 +24,8 @@ rm -rf /root/.opencode
 rm /tmp/opencode
 
 # RTK to reduce token consumption
-cargo install --git https://github.com/rtk-ai/rtk
-mv /root/.cargo/bin/rtk /usr/local/bin/rtk
-# The opencode plugin
-# See https://github.com/martinstannard/openrtk
-npm install openrtk
-
+curl -LO https://github.com/rtk-ai/rtk/releases/download/v1.1.0/rtk-1.1.0-1.x86_64.rpm
+dnf install -y rtk-1.1.0-1.x86_64.rpm
 
 # kustomize
 curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.8.1/kustomize_v5.8.1_linux_amd64.tar.gz --output kustomize.tar.gz
