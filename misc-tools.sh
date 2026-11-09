@@ -15,7 +15,7 @@ tar xvf act_Linux_x86_64.tar.gz -C /usr/local/bin act
 rm -f act_Linux_x86_64.tar.gz
 
 #opencode
-curl -fsSL https://opencode.ai/install > /tmp/opencode
+curl -fsSL https://opencode.ai/v2/install > /tmp/opencode
 bash /tmp/opencode --no-modify-path
 # opencode installs to a dumb location
 mv /root/.opencode/bin/opencode /usr/local/bin/opencode
