@@ -5,6 +5,7 @@ git
 git-delta
 go
 helix
+helix-parsers
 jq
 just
 make
